@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>ux톤 적용하기</title>
+    <style>
+        /* Shadcn/ui 기반 스타일 시스템 */
+        :root {
+            --background: 0 0% 100%;
+            --foreground: 222.2 84% 4.9%;
+            --card: 0 0% 100%;
+            --card-foreground: 222.2 84% 4.9%;
+            --popover: 0 0% 100%;
+            --popover-foreground: 222.2 84% 4.9%;
+            --primary: 221.2 83.2% 53.3%;
+            --primary-foreground: 210 40% 98%;
+            --secondary: 210 40% 96%;
+            --secondary-foreground: 222.2 84% 4.9%;
+            --muted: 210 40% 96%;
+            --muted-foreground: 215.4 16.3% 46.9%;
+            --accent: 210 40% 96%;
+            --accent-foreground: 222.2 84% 4.9%;
+            --destructive: 0 84.2% 60.2%;
+            --destructive-foreground: 210 40% 98%;
+            --border: 214.3 31.8% 91.4%;
+            --input: 214.3 31.8% 91.4%;
+            --ring: 221.2 83.2% 53.3%;
+            --radius: 0.5rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: hsl(var(--background));
+            color: hsl(var(--foreground));
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .container {
+            padding: 24px;
+            max-width: 100%;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        /* Header */
+        .header {
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 600;
+            color: hsl(var(--foreground));
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: hsl(var(--muted-foreground));
+            font-size: 14px;
+        }
+
+        /* Card 컴포넌트 */
+        .card {
+            background: hsl(var(--card));
+            border: 1px solid hsl(var(--border));
+            border-radius: var(--radius);
+            box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+            margin-bottom: 16px;
+        }
+
+        .card-header {
+            padding: 16px 16px 0;
+        }
+
+        .card-content {
+            padding: 16px;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: hsl(var(--card-foreground));
+        }
+
+        .card-description {
+            color: hsl(var(--muted-foreground));
+            font-size: 13px;
+        }
+
+        /* Badge 컴포넌트 */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            border-radius: calc(var(--radius) - 2px);
+            padding: 2px 8px;
+            font-size: 11px;
+            font-weight: 500;
+            line-height: 1;
+            transition: colors;
+        }
+
+        .badge-default {
+            background: hsl(var(--primary));
+            color: hsl(var(--primary-foreground));
+        }
+
+        .badge-secondary {
+            background: hsl(var(--secondary));
+            color: hsl(var(--secondary-foreground));
+        }
+
+        .badge-outline {
+            border: 1px solid hsl(var(--border));
+            color: hsl(var(--foreground));
+        }
+
+        /* Progress 컴포넌트 */
+        .progress {
+            position: relative;
+            height: 8px;
+            width: 100%;
+            overflow: hidden;
+            border-radius: 9999px;
+            background: hsl(var(--secondary));
+            margin: 8px 0;
+        }
+
+        .progress-indicator {
+            height: 100%;
+            width: 0%;
+            background: hsl(var(--primary));
+            transition: width 0.3s ease;
+            border-radius: 9999px;
+        }
+
+        /* Button 컴포넌트 */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius);
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: none;
+            padding: 8px 16px;
+            height: 36px;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: hsl(var(--primary));
+            color: hsl(var(--primary-foreground));
+        }
+
+        .btn-primary:hover {
+            background: hsl(var(--primary) / 0.9);
+        }
+
+        .btn-secondary {
+            background: hsl(var(--secondary));
+            color: hsl(var(--secondary-foreground));
+        }
+
+        .btn-secondary:hover {
+            background: hsl(var(--secondary) / 0.8);
+        }
+
+        .btn-outline {
+            border: 1px solid hsl(var(--border));
+            background: transparent;
+            color: hsl(var(--foreground));
+        }
+
+        .btn-outline:hover {
+            background: hsl(var(--accent));
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-sm {
+            height: 32px;
+            padding: 4px 12px;
+            font-size: 12px;
+        }
+
+        /* Checkbox 컴포넌트 */
+        .checkbox-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 8px 0;
+        }
+
+        .checkbox {
+            width: 16px;
+            height: 16px;
+            border: 1px solid hsl(var(--border));
+            border-radius: 2px;
+            background: hsl(var(--background));
+            cursor: pointer;
+            position: relative;
+        }
+
+        .checkbox:checked {
+            background: hsl(var(--primary));
+            border-color: hsl(var(--primary));
+        }
+
+        .checkbox:checked::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: hsl(var(--primary-foreground));
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        .checkbox-label {
+            font-size: 13px;
+            color: hsl(var(--foreground));
+            cursor: pointer;
+        }
+
+        /* 분석 결과 스타일 */
+        .analysis-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .metric-card {
+            background: hsl(var(--muted));
+            padding: 12px;
+            border-radius: var(--radius);
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 20px;
+            font-weight: 600;
+            color: hsl(var(--primary));
+            margin-bottom: 4px;
+        }
+
+        .metric-label {
+            font-size: 11px;
+            color: hsl(var(--muted-foreground));
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* 규칙 리스트 */
+        .rules-list {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid hsl(var(--border));
+            border-radius: var(--radius);
+            padding: 8px;
+            background: hsl(var(--background));
+        }
+
+        .rule-item {
+            padding: 8px;
+            border-radius: calc(var(--radius) - 2px);
+            margin-bottom: 4px;
+            border: 1px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .rule-item:hover {
+            background: hsl(var(--accent));
+        }
+
+        .rule-item.selected {
+            background: hsl(var(--primary) / 0.1);
+            border-color: hsl(var(--primary));
+        }
+
+        .rule-pattern {
+            font-weight: 500;
+            color: hsl(var(--destructive));
+            font-size: 12px;
+        }
+
+        .rule-replacement {
+            font-weight: 500;
+            color: hsl(var(--primary));
+            font-size: 12px;
+        }
+
+        .rule-description {
+            font-size: 11px;
+            color: hsl(var(--muted-foreground));
+            margin-top: 4px;
+        }
+
+        .rule-matches {
+            font-size: 10px;
+            color: hsl(var(--muted-foreground));
+            margin-top: 2px;
+        }
+
+        /* 키워드 태그 */
+        .keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-top: 8px;
+        }
+
+        .keyword-tag {
+            background: hsl(var(--secondary));
+            color: hsl(var(--secondary-foreground));
+            padding: 2px 6px;
+            border-radius: calc(var(--radius) - 2px);
+            font-size: 10px;
+            font-weight: 500;
+        }
+
+        /* 로딩 상태 */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            color: hsl(var(--muted-foreground));
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid hsl(var(--border));
+            border-top: 2px solid hsl(var(--primary));
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 8px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* 버튼 그룹 */
+        .button-group {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .button-group .btn {
+            flex: 1;
+        }
+
+        /* 스크롤바 스타일 */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: hsl(var(--secondary));
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: hsl(var(--border));
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: hsl(var(--muted-foreground));
+        }
+
+        /* 반응형 */
+        @media (max-width: 400px) {
+            .analysis-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 헤더 -->
+        <div class="header">
+            <h1>🎯 ux톤 적용하기</h1>
+            <p>텍스트를 분석하고 UX 친화적 톤으로 변환합니다</p>
+        </div>
+
+        <!-- 선택된 텍스트 정보 -->
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">선택된 텍스트</div>
+                <div class="card-description" id="selection-status">
+                    피그마에서 텍스트 노드를 선택해주세요
+                </div>
+            </div>
+            <div class="card-content">
+                <button class="btn btn-outline btn-sm" id="analyze-btn" disabled>
+                    📊 텍스트 분석하기
+                </button>
+            </div>
+        </div>
+
+        <!-- 분석 결과 -->
+        <div class="card" id="analysis-card" style="display: none;">
+            <div class="card-header">
+                <div class="card-title">UX 톤 프로파일</div>
+                <div class="card-description">현재 텍스트의 톤 분석 결과입니다</div>
+            </div>
+            <div class="card-content">
+                <!-- 톤 정보 -->
+                <div style="margin-bottom: 16px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <span style="font-size: 13px; color: hsl(var(--muted-foreground));">현재 톤</span>
+                        <span class="badge badge-outline" id="current-tone">분석 중</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <span style="font-size: 13px; color: hsl(var(--muted-foreground));">추천 톤</span>
+                        <span class="badge badge-default" id="recommended-tone">분석 중</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-size: 13px; color: hsl(var(--muted-foreground));">신뢰도</span>
+                        <span id="confidence-score">0%</span>
+                    </div>
+                </div>
+
+                <!-- 분석 메트릭 -->
+                <div class="analysis-grid">
+                    <div class="metric-card">
+                        <div class="metric-value" id="formality-score">0</div>
+                        <div class="metric-label">격식성</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" id="readability-score">0</div>
+                        <div class="metric-label">가독성</div>
+                    </div>
+                </div>
+
+                <!-- 주요 키워드 -->
+                <div style="margin-bottom: 16px;">
+                    <div style="font-size: 13px; font-weight: 500; margin-bottom: 8px; color: hsl(var(--foreground));">
+                        주요 키워드
+                    </div>
+                    <div class="keywords" id="keywords-container">
+                        <!-- 키워드들이 여기에 동적으로 추가됩니다 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 적용 가능한 규칙들 -->
+        <div class="card" id="rules-card" style="display: none;">
+            <div class="card-header">
+                <div class="card-title">적용 가능한 변환 규칙</div>
+                <div class="card-description">변환하고 싶은 규칙을 선택하세요</div>
+            </div>
+            <div class="card-content">
+                <div class="rules-list" id="rules-list">
+                    <!-- 규칙들이 여기에 동적으로 추가됩니다 -->
+                </div>
+                
+                <div class="button-group">
+                    <button class="btn btn-outline btn-sm" id="select-all-btn">
+                        전체 선택
+                    </button>
+                    <button class="btn btn-outline btn-sm" id="clear-all-btn">
+                        선택 해제
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 액션 버튼들 -->
+        <div class="button-group">
+            <button class="btn btn-primary" id="apply-btn" disabled>
+                ✨ 톤 적용하기
+            </button>
+            <button class="btn btn-secondary" id="cancel-btn">
+                취소
+            </button>
+        </div>
+
+        <!-- 로딩 상태 -->
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>분석 중입니다...</p>
+        </div>
+    </div>
+
+<script>
+        // 전역 변수
+        let currentProfile = null;
+        let selectedRules = new Set();
+
+        // DOM 요소들
+        const analyzeBtn = document.getElementById('analyze-btn');
+        const applyBtn = document.getElementById('apply-btn');
+        const cancelBtn = document.getElementById('cancel-btn');
+        const selectAllBtn = document.getElementById('select-all-btn');
+        const clearAllBtn = document.getElementById('clear-all-btn');
+        const selectionStatus = document.getElementById('selection-status');
+        const analysisCard = document.getElementById('analysis-card');
+        const rulesCard = document.getElementById('rules-card');
+        const loading = document.getElementById('loading');
+
+        // 초기화
+        function init() {
+            checkSelection();
+            setInterval(checkSelection, 2000); // 2초마다 선택 상태 확인
+        }
+
+        // 선택 상태 확인
+        function checkSelection() {
+            parent.postMessage({ 
+                pluginMessage: { type: 'analyze-text' } 
+            }, '*');
+        }
+
+        // 텍스트 분석 실행
+        function analyzeText() {
+            showLoading(true);
+            parent.postMessage({ 
+                pluginMessage: { type: 'analyze-text' } 
+            }, '*');
+        }
+
+        // 톤 적용 실행
+        function applyTone() {
+            if (selectedRules.size === 0) {
+                alert('적용할 규칙을 선택해주세요!');
+                return;
+            }
+
+            showLoading(true);
+            parent.postMessage({ 
+                pluginMessage: { 
+                    type: 'apply-tone',
+                    selectedRules: Array.from(selectedRules)
+                } 
+            }, '*');
+        }
+
+        // 로딩 상태 표시
+        function showLoading(show) {
+            loading.style.display = show ? 'block' : 'none';
+        }
+
+        // 분석 결과 표시
+        function displayAnalysisResult(data) {
+            const { profile, nodeCount } = data;
+            currentProfile = profile;
+
+            // 선택 상태 업데이트
+            selectionStatus.textContent = `${nodeCount}개의 텍스트 노드가 선택됨`;
+            analyzeBtn.disabled = nodeCount === 0;
+
+            if (nodeCount === 0) {
+                analysisCard.style.display = 'none';
+                rulesCard.style.display = 'none';
+                return;
+            }
+
+            // 분석 결과 표시
+            analysisCard.style.display = 'block';
+            
+            document.getElementById('current-tone').textContent = profile.currentTone;
+            document.getElementById('recommended-tone').textContent = profile.recommendedTone;
+            document.getElementById('confidence-score').textContent = `${profile.confidence}%`;
+            document.getElementById('formality-score').textContent = profile.analysis.formalityScore;
+            document.getElementById('readability-score').textContent = profile.analysis.readabilityScore;
+
+            // 키워드 표시
+            const keywordsContainer = document.getElementById('keywords-container');
+            keywordsContainer.innerHTML = profile.analysis.topKeywords
+                .map(keyword => `<span class="keyword-tag">${keyword}</span>`)
+                .join('');
+
+            // 적용 가능한 규칙들 표시
+            if (profile.applicableRules.length > 0) {
+                displayApplicableRules(profile.applicableRules);
+                rulesCard.style.display = 'block';
+            } else {
+                rulesCard.style.display = 'none';
+            }
+        }
+
+        // 적용 가능한 규칙들 표시
+        function displayApplicableRules(applicableRules) {
+            const rulesList = document.getElementById('rules-list');
+            
+            rulesList.innerHTML = applicableRules.map(({ rule, matches }) => `
+                <div class="rule-item" data-pattern="${rule.pattern}">
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" class="checkbox" id="rule-${rule.pattern}" 
+                               onchange="toggleRule('${rule.pattern}')">
+                        <label class="checkbox-label" for="rule-${rule.pattern}">
+                            <div>
+                                <span class="rule-pattern">'${rule.pattern}'</span> → 
+                                <span class="rule-replacement">'${rule.replacement}'</span>
+                            </div>
+                            <div class="rule-description">${rule.description}</div>
+                            <div class="rule-matches">${matches.length}개 발견: ${matches.join(', ')}</div>
+                        </label>
+                    </div>
+                </div>
+            `).join('');
+
+            updateApplyButton();
+        }
+
+        // 규칙 선택/해제
+        function toggleRule(pattern) {
+            if (selectedRules.has(pattern)) {
+                selectedRules.delete(pattern);
+            } else {
+                selectedRules.add(pattern);
+            }
+            updateApplyButton();
+            updateRuleItemStyles();
+        }
+
+        // 전체 선택
+        function selectAllRules() {
+            if (!currentProfile) return;
+            
+            currentProfile.applicableRules.forEach(({ rule }) => {
+                selectedRules.add(rule.pattern);
+                const checkbox = document.getElementById(`rule-${rule.pattern}`);
+                if (checkbox) checkbox.checked = true;
+            });
+            
+            updateApplyButton();
+            updateRuleItemStyles();
+        }
+
+        // 선택 해제
+        function clearAllRules() {
+            selectedRules.clear();
+            
+            document.querySelectorAll('.rules-list .checkbox').forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            
+            updateApplyButton();
+            updateRuleItemStyles();
+        }
+
+        // 적용 버튼 상태 업데이트
+        function updateApplyButton() {
+            applyBtn.disabled = selectedRules.size === 0;
+        }
+
+        // 규칙 아이템 스타일 업데이트
+        function updateRuleItemStyles() {
+            document.querySelectorAll('.rule-item').forEach(item => {
+                const pattern = item.dataset.pattern;
+                if (selectedRules.has(pattern)) {
+                    item.classList.add('selected');
+                } else {
+                    item.classList.remove('selected');
+                }
+            });
+        }
+
+        // 변환 완료 처리
+        function handleConversionComplete(data) {
+            showLoading(false);
+            
+            // 성공 메시지 표시
+            const message = `${data.convertedCount}개의 텍스트가 변환되었습니다!`;
+            alert(message);
+            
+            // 업데이트된 프로파일로 UI 갱신
+            if (data.updatedProfile) {
+                displayAnalysisResult({
+                    profile: data.updatedProfile,
+                    nodeCount: data.convertedCount
+                });
+            }
+            
+            // 선택 초기화
+            selectedRules.clear();
+            clearAllRules();
+        }
+
+        // 이벤트 리스너 등록
+        analyzeBtn.onclick = analyzeText;
+        applyBtn.onclick = applyTone;
+        cancelBtn.onclick = () => parent.postMessage({ pluginMessage: { type: 'cancel' } }, '*');
+        selectAllBtn.onclick = selectAllRules;
+        clearAllBtn.onclick = clearAllRules;
+
+        // 피그마에서 메시지 받기
+        window.onmessage = (event) => {
+            const msg = event.data.pluginMessage;
+            
+            if (msg.type === 'analysis-result') {
+                showLoading(false);
+                displayAnalysisResult(msg.data);
+            }
+            
+            if (msg.type === 'conversion-complete') {
+                handleConversionComplete(msg.data);
+            }
+        };
+
+        // 전역 함수로 노출 (HTML에서 사용)
+        window.toggleRule = toggleRule;
+
+        // 초기화 실행
+        init();
+</script>
+</body>
+</html>
